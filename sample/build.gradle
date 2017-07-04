@@ -1,0 +1,14 @@
+apply plugin: 'java'
+
+sourceSets {
+  main.java.srcDirs += 'src/main/kotlin'
+}
+
+dependencies {
+//  compile project(':library')                         // Comment, if you want to use lib as a source module.
+  compile fileTree(dir: 'libs', include: ['*.jar'])   // Uncomment, if you want to use JAR lib.
+
+  compile "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+  compile 'com.mixpanel:mixpanel-java:1.4.4'
+  compile 'com.segment.analytics.java:analytics:2.0.0'
+}
