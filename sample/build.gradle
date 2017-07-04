@@ -1,11 +1,12 @@
 apply plugin: 'java'
+apply plugin: 'kotlin'
 
 sourceSets {
   main.java.srcDirs += 'src/main/kotlin'
 }
 
 dependencies {
-//  compile project(':library')                         // Comment, if you want to use lib as a source module.
+//  compile project(':library')                         // Uncomment, if you want to use lib as a source module.
   compile fileTree(dir: 'libs', include: ['*.jar'])   // Uncomment, if you want to use JAR lib.
 
   compile "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
