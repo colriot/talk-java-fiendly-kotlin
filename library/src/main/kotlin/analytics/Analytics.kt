@@ -14,26 +14,26 @@ object Analytics {
   private set
 
   @JvmStatic fun init() {
-    println("<Internal Init>")
+    log("<Internal Init>")
 
     plugins.forEach { it.init() }
     isInited = true
   }
 
   @JvmStatic fun send(event: Event) {
-    println("<Internal Send event>")
+    log("<Internal Send event>")
 
     plugins.forEach { 
       try {
         it.send(event)
       } catch (e: IOException) {
-        println("WARN: ${it.javaClass.simpleName} fired IOE")
+        log("WARN: ${it.javaClass.simpleName} fired IOE")
       } 
     }
   }
 
   @JvmStatic fun close() {
-    println("<Internal Close>")
+    log("<Internal Close>")
 
     plugins.forEach { it.close() }
     isInited = false
@@ -50,6 +50,10 @@ object Analytics {
   }
 
   @JvmStatic fun getPlugins(): List<@JvmWildcard Plugin> = plugins.toImmutableList()
+
+  private fun log(message: String) {
+    println(message)
+  }
 }
 
 private fun <T> ArrayList<T>.toImmutableList() = when (size) {
