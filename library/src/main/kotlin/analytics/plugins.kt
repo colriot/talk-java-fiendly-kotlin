@@ -4,6 +4,7 @@ import java.io.IOException
 
 interface Plugin {
   fun init()
+  /** @throws IOException if sending failed */
   @Throws(IOException::class)
   fun send(event: Event)
   fun close()
