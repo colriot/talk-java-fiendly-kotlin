@@ -54,10 +54,10 @@ object Analytics {
   private fun log(message: String) {
     println(message)
   }
-}
 
-private fun <T> ArrayList<T>.toImmutableList() = when (size) {
-  0 -> emptyList()
-  1 -> Collections.singletonList(get(0))
-  else -> Collections.unmodifiableList(this)
+  private fun <T> ArrayList<T>.toImmutableList() = when (size) {
+    0 -> emptyList()
+    1 -> Collections.singletonList(get(0))
+    else -> Collections.unmodifiableList(this)
+  }
 }
