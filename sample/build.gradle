@@ -6,8 +6,8 @@ sourceSets {
 }
 
 dependencies {
-//  compile project(':library')                         // Uncomment, if you want to use lib as a source module.
-  compile fileTree(dir: 'libs', include: ['*.jar'])   // Uncomment, if you want to use JAR lib.
+  compile project(':library')                         // Uncomment, if you want to use lib as a source module.
+//  compile fileTree(dir: 'libs', include: ['*.jar'])   // Uncomment, if you want to use JAR lib.
 
   compile "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
   compile 'com.mixpanel:mixpanel-java:1.4.4'

@@ -4,12 +4,21 @@ import java.lang.reflect.Proxy
 import java.util.*
 import kotlin.reflect.KClass
 
-class Retrofit private constructor(val baseUrl: String, val client: Client) {
+class Retrofit private constructor(
+    val baseUrl: String,
+    val client: Client
+) {
   fun <T : Any> create(service: Class<T>): T {
-//    return create(service.kotlin)   // Use this, if you've provided implementation for KClass in the first place.
+    // Use this, if you've provided implementation for
+    // KClass in the first place.
+//    return create(service.kotlin)
 
-    val proxyInstance = Proxy.newProxyInstance(service.classLoader, arrayOf(service)) { _, method, args ->
-      println("'${method.name}' was invoked with args: ${Arrays.deepToString(args)}.")
+    val proxyInstance = Proxy.newProxyInstance(
+        service.classLoader,
+        arrayOf(service)
+    ) { _, method, args ->
+      println("'${method.name}' was invoked with args: " +
+          "${Arrays.deepToString(args)}.")
     }
     @Suppress("UNCHECKED_CAST")
     return proxyInstance as T
@@ -23,6 +32,26 @@ class Retrofit private constructor(val baseUrl: String, val client: Client) {
     println("!!!!!! internal fun validate() was called !!!!!!")
     return this
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   class Builder {
     private lateinit var baseUrl: String

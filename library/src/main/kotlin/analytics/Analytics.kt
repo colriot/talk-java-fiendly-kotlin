@@ -4,26 +4,28 @@ import java.io.IOException
 import java.util.*
 
 object Analytics {
-  const val VERSION = "0.0.1"
+  const val USER_ID: String = "user_id"
+  val EMPTY_PLUGIN = EmptyPlugin()
 
   private val plugins = arrayListOf<Plugin>()
 
-  @JvmStatic @get:JvmName("hasPlugins") val hasPlugins get() = plugins.isNotEmpty()
+  val hasPlugins
+    get() = plugins.isNotEmpty()
 
-  @JvmStatic var isInited: Boolean = false
+  var isInited: Boolean = false
   private set
 
-  @JvmStatic fun init() {
+  fun init() {
     log("<Internal Init>")
 
     plugins.forEach { it.init() }
     isInited = true
   }
 
-  @JvmStatic fun send(event: Event) {
+  fun send(event: Event) {
     log("<Internal Send event>")
 
-    plugins.forEach { 
+    plugins.forEach {
       try {
         it.send(event)
       } catch (e: IOException) {
@@ -32,32 +34,32 @@ object Analytics {
     }
   }
 
-  @JvmStatic fun close() {
+  fun close() {
     log("<Internal Close>")
 
     plugins.forEach { it.close() }
     isInited = false
   }
 
-  @JvmStatic fun addPlugin(plug: Plugin) {
+  fun addPlugin(plug: Plugin) {
     if (isInited) plug.init()
     plugins.add(plug)
   }
 
-//  @JvmSuppressWildcards
-  @JvmStatic fun addPlugins(plugs: List<Plugin>) {
+  fun addPlugins(plugs: List<Plugin>) {
     plugs.forEach { addPlugin(it) }
   }
 
-  @JvmStatic fun getPlugins(): List<@JvmWildcard Plugin> = plugins.toImmutableList()
+  fun getPlugins(): List<Plugin> = plugins
 
   private fun log(message: String) {
     println(message)
   }
 
-  private fun <T> ArrayList<T>.toImmutableList() = when (size) {
-    0 -> emptyList()
-    1 -> Collections.singletonList(get(0))
-    else -> Collections.unmodifiableList(this)
-  }
+  private fun <T> ArrayList<T>.toImmutableList() =
+      when (size) {
+        0 -> emptyList()
+        1 -> Collections.singletonList(get(0))
+        else -> Collections.unmodifiableList(this)
+      }
 }
