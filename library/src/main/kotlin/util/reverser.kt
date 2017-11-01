@@ -7,9 +7,6 @@ inline fun <reified T> reversedClassName() =
     T::class.java.simpleName.reverse()
 
 
-inline fun <T> Iterable<T>.forEachReversed(action: (T) -> Unit): Unit {
+inline fun <T> Iterable<T>.forEachReversed(action: (T) -> Unit) {
   for (element in this.reversed()) action(element)
 }
-
-
-inline fun FIXME() : Nothing = throw RuntimeException("nothing")

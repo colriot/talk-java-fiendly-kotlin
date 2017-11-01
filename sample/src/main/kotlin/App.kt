@@ -19,20 +19,22 @@ fun main(args: Array<String>) {
 
   useAnalytics()
 
+  useUtils()
 
-//  useUtils()
+  useRetrofit()
 
-
-//  useRetrofit()
-
-
-//  useMisc()
+  useMisc()
 }
 
 
 
 
 private fun useAnalytics() {
+
+  // Overloads
+  Analytics.send(Event("only_name_event"))
+
+
   // Statics
   val props = mapOf(
       USER_ID to 1235,
@@ -40,10 +42,6 @@ private fun useAnalytics() {
   )
 
   Analytics.send(Event("custom_event", props))
-
-
-  // Overloads
-  Analytics.send(Event("only_name_event"))
 
 
   // Renaming
@@ -66,15 +64,10 @@ private fun useAnalytics() {
   displayPlugins(plugins)
 
 
-
-
-
-
   // Will cause error if uncommented, due to immutable
   // nature of List
 //  Analytics.getPlugins().add(EmptyPlugin())
 }
-
 
 private fun displayPlugins(plugins: List<Plugin>) {
   println("Following plugins installed: ")
@@ -84,44 +77,14 @@ private fun displayPlugins(plugins: List<Plugin>) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 private fun useUtils() {
-  println("Test".reverse())
-
-
   listOf(1, 2, 3, 4, 5).printReversedSum()
 
   listOf("1", "2", "3", "4", "5").printReversedSum()
+
+
+  println("Test".reverse())
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -137,25 +100,10 @@ private fun useRetrofit() {
 
   // KClass<*> handling. Internal visibility.
   val api = retrofit
-//      .validate()        // Not visible, because it's internal.
       .create(Api::class)
 
   api.sendMessage("Hello from Kotlin")
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -165,21 +113,8 @@ private fun useMisc() {
   listOf(1, 2, 3, 4).forEachReversed(::println)
 
 
-
+  // Nothing return type causes Unreachable code warning
   FIXME()
 
   println(reversedClassName<String>())
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

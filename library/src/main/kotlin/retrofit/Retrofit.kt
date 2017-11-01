@@ -34,25 +34,6 @@ class Retrofit private constructor(
   }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   class Builder {
     private lateinit var baseUrl: String
     private var client: Client = Client()
