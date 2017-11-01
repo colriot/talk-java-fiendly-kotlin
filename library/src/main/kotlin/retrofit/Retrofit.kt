@@ -24,8 +24,16 @@ class Retrofit private constructor(
     return proxyInstance as T
   }
 
+  // Simply reuse previous method together with
+  // a neat extension-property `.java`
   fun <T : Any> create(service: KClass<T>): T {
     return create(service.java)
+  }
+
+  // But for more idiomatic code, it's better to use reified type
+  // parameters instead of explicit KClass parameters
+  inline fun <reified T : Any> create(): T {
+    return create(T::class.java)
   }
 
   internal fun validate(): Retrofit {

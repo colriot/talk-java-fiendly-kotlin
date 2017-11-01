@@ -69,6 +69,7 @@ private fun useAnalytics() {
 //  Analytics.getPlugins().add(EmptyPlugin())
 }
 
+
 private fun displayPlugins(plugins: List<Plugin>) {
   println("Following plugins installed: ")
   plugins.forEach { println(it.javaClass) }
@@ -100,7 +101,8 @@ private fun useRetrofit() {
 
   // KClass<*> handling. Internal visibility.
   val api = retrofit
-      .create(Api::class)
+//      .validate()        // Not visible, because it's internal.
+      .create<Api>()
 
   api.sendMessage("Hello from Kotlin")
 }

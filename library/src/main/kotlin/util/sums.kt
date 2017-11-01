@@ -1,3 +1,6 @@
+@file:JvmName("ReverserUtils")
+@file:JvmMultifileClass
+
 package util
 
 fun List<Int>.printReversedSum() {

@@ -4,7 +4,6 @@ import analytics.Event;
 import analytics.LoggerPlugin;
 import analytics.Plugin;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,8 +12,7 @@ import retrofit.Client;
 import retrofit.Retrofit;
 import sample.Api;
 import sample.SegmentPlugin;
-import util.ReverserKt;
-import util.SumsKt;
+import util.ReverserUtils;
 import util.UtilKt;
 
 import static analytics.Analytics.USER_ID;
@@ -38,7 +36,7 @@ public class App {
   private static void useAnalytics() {
 
     // Overloads
-    Analytics.INSTANCE.send(new Event("only_name_event", Collections.emptyMap()));
+    Analytics.send(new Event("only_name_event"));
 
 
     // Statics
@@ -46,18 +44,18 @@ public class App {
     props.put(USER_ID, 1235);
     props.put("my_custom_attr", true);
 
-    Analytics.INSTANCE.send(new Event("custom_event", props));
+    Analytics.send(new Event("custom_event", props));
 
 
     // Renaming
-    boolean hasPlugins = Analytics.INSTANCE.getHasPlugins();
+    boolean hasPlugins = Analytics.hasPlugins();
 
 
     // Accessing fields, constants
-    Analytics.INSTANCE.addPlugin(Analytics.INSTANCE.getEMPTY_PLUGIN()); // dry-run
+    Analytics.addPlugin(Analytics.EMPTY_PLUGIN); // dry-run
 
     final LoggerPlugin loggerPlugin = new LoggerPlugin("ALog");
-    System.out.println("Logger TAG: " + loggerPlugin.getTag());
+    System.out.println("Logger TAG: " + loggerPlugin.tag);
 
 
     // Wildcards
@@ -66,16 +64,19 @@ public class App {
 
     // This will cause incompatible types error, if you add
     // @JvmSuppressWildcards on addPlugins().
-    Analytics.INSTANCE.addPlugins(pluginsToSet);
+    Analytics.addPlugins(pluginsToSet);
 
-    final List<Plugin> plugins = Analytics.INSTANCE.getPlugins();
+    final List<? extends Plugin> plugins = Analytics.getPlugins();
     displayPlugins(plugins);
 
 
-    // Will succeed unless you add @JvmWildcard
-    // on getPlugins()
-    Analytics.INSTANCE.getPlugins().add(new EmptyPlugin());
+    // Fails due to added @JvmWildcard annotation for getPlugins()
+    //Analytics.getPlugins().add(new EmptyPlugin());
+
+    // Will cause a ClassCastException - this is not a mutable ArrayList any more
+    //((ArrayList<Plugin>) Analytics.getPlugins()).add(new EmptyPlugin());
   }
+
 
   private static void displayPlugins(List<? extends Plugin> plugins) {
     System.out.println("Following plugins installed: ");
@@ -88,12 +89,12 @@ public class App {
 
 
   private static void useUtils() {
-    System.out.println(ReverserKt.reverse("Test"));
+    System.out.println(ReverserUtils.reverse("Test"));
 
 
-    SumsKt.printReversedSum(asList(1, 2, 3, 4, 5));
+    ReverserUtils.printReversedSum(asList(1, 2, 3, 4, 5));
 
-    SumsKt.printReversedConcatenation(asList("1", "2", "3", "4", "5"));
+    ReverserUtils.printReversedConcatenation(asList("1", "2", "3", "4", "5"));
   }
 
 
@@ -110,7 +111,10 @@ public class App {
 
     // Class<?> handling. Internal visibility.
     final Api api = retrofit
-        //.validate()     // visible or not?
+        // visible under another name, but it's fake
+        //.validate$production_sources_for_module_library_main()
+
+        .validate$library()     // the real one is not visible, but accessible!
         .create(Api.class);
 
     api.sendMessage("Hello from Java");
@@ -122,7 +126,7 @@ public class App {
   private static void useMisc() {
     // Inline functions. Unit.
     final List<Integer> list = asList(1, 2, 3, 4);
-    ReverserKt.forEachReversed(list, integer -> {
+    ReverserUtils.forEachReversed(list, integer -> {
       System.out.println(integer);
 
       // Can not use method reference because of this.

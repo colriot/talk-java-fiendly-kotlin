@@ -1,3 +1,6 @@
+@file:JvmName("ReverserUtils")
+@file:JvmMultifileClass
+
 package util
 
 inline fun String.reverse() =
