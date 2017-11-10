@@ -5,6 +5,7 @@ import java.io.IOException
 interface Plugin {
   fun init()
   /** @throws IOException if sending failed */
+  @Throws(IOException::class)
   fun send(event: Event)
   fun close()
 }
@@ -12,6 +13,7 @@ interface Plugin {
 open class EmptyPlugin : Plugin {
   override fun init() {}
 
+  @Throws(IOException::class)
   override fun send(event: Event) {}
 
   override fun close() {}

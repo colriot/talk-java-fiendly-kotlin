@@ -5,24 +5,24 @@ import java.util.*
 
 object Analytics {
   const val USER_ID: String = "user_id"
-  val EMPTY_PLUGIN = EmptyPlugin()
+  @JvmField val EMPTY_PLUGIN = EmptyPlugin()
 
   private val plugins = arrayListOf<Plugin>()
 
-  val hasPlugins
+  @get:JvmName("hasPlugins") @JvmStatic val hasPlugins
     get() = plugins.isNotEmpty()
 
-  var isInited: Boolean = false
+  @JvmStatic var isInited: Boolean = false
   private set
 
-  fun init() {
+  @JvmStatic fun init() {
     log("<Internal Init>")
 
     plugins.forEach { it.init() }
     isInited = true
   }
 
-  fun send(event: Event) {
+  @JvmStatic fun send(event: Event) {
     log("<Internal Send event>")
 
     plugins.forEach {
@@ -34,23 +34,24 @@ object Analytics {
     }
   }
 
-  fun close() {
+  @JvmStatic fun close() {
     log("<Internal Close>")
 
     plugins.forEach { it.close() }
     isInited = false
   }
 
-  fun addPlugin(plug: Plugin) {
+  @JvmStatic fun addPlugin(plug: Plugin) {
     if (isInited) plug.init()
     plugins.add(plug)
   }
 
-  fun addPlugins(plugs: List<Plugin>) {
+  @JvmStatic fun addPlugins(plugs: List<Plugin>) {
     plugs.forEach { addPlugin(it) }
   }
 
-  fun getPlugins(): List<Plugin> = plugins
+  @JvmStatic fun getPlugins(): List<@JvmWildcard Plugin> =
+      plugins.toImmutableList()
 
   private fun log(message: String) {
     println(message)

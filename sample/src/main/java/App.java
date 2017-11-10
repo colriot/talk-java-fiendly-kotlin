@@ -4,7 +4,6 @@ import analytics.Event;
 import analytics.LoggerPlugin;
 import analytics.Plugin;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,8 +12,7 @@ import retrofit.Client;
 import retrofit.Retrofit;
 import sample.Api;
 import sample.SegmentPlugin;
-import util.ReverserKt;
-import util.SumsKt;
+import util.ReverserUtils;
 
 import static analytics.Analytics.USER_ID;
 import static java.util.Arrays.asList;
@@ -41,33 +39,32 @@ public class App {
 
   private static void useAnalytics() {
 
-    Analytics.INSTANCE.send(new Event("only_name_event", Collections.emptyMap()));
+    Analytics.send(new Event("only_name_event"));
 
 
     final Map<String, Object> props = new HashMap<>();
     props.put(USER_ID, 1235);
     props.put("my_custom_attr", true);
 
-    Analytics.INSTANCE.send(new Event("custom_event", props));
+    Analytics.send(new Event("custom_event", props));
 
 
-    boolean hasPlugins = Analytics.INSTANCE.getHasPlugins();
+    boolean hasPlugins = Analytics.hasPlugins();
 
 
-    Analytics.INSTANCE.addPlugin(Analytics.INSTANCE.getEMPTY_PLUGIN()); // dry-run
+    Analytics.addPlugin(Analytics.EMPTY_PLUGIN); // dry-run
 
 
 
     final List<EmptyPlugin> pluginsToSet =
         Arrays.asList(new LoggerPlugin("ALog"), new SegmentPlugin());
 
-    Analytics.INSTANCE.addPlugins(pluginsToSet);
+    Analytics.addPlugins(pluginsToSet);
 
-    final List<Plugin> plugins = Analytics.INSTANCE.getPlugins();
+    final List<? extends Plugin> plugins = Analytics.getPlugins();
     displayPlugins(plugins);
 
-
-    Analytics.INSTANCE.getPlugins().add(new EmptyPlugin());
+    //((ArrayList<Plugin>) Analytics.getPlugins()).add(new EmptyPlugin());
   }
 
 
@@ -114,12 +111,12 @@ public class App {
 
 
   private static void useUtils() {
-    System.out.println(ReverserKt.reverse("Test"));
+    System.out.println(ReverserUtils.reverse("Test"));
 
 
-    SumsKt.printReversedSum(asList(1, 2, 3, 4, 5));
+    ReverserUtils.printReversedSum(asList(1, 2, 3, 4, 5));
 
-    SumsKt.printReversedConcatenation(
+    ReverserUtils.printReversedConcatenation(
         asList("1", "2", "3", "4", "5"));
   }
 
@@ -154,6 +151,7 @@ public class App {
 
 
     final Api api = retrofit
+        .validate$library()
         .create(Api.class);
 
     api.sendMessage("Hello from Java");
@@ -183,7 +181,7 @@ public class App {
 
   private static void useMisc() {
     final List<Integer> list = asList(1, 2, 3, 4);
-    ReverserKt.forEachReversed(list, integer -> {
+    ReverserUtils.forEachReversed(list, integer -> {
       System.out.println(integer);
 
       return Unit.INSTANCE;

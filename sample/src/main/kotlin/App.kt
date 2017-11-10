@@ -140,7 +140,7 @@ private fun useRetrofit() {
 
 
   val api = retrofit
-      .create(Api::class)
+      .create<Api>()
 
   api.sendMessage("Hello from Kotlin")
 }

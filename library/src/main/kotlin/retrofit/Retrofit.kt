@@ -2,7 +2,6 @@ package retrofit
 
 import java.lang.reflect.Proxy
 import java.util.*
-import kotlin.reflect.KClass
 
 class Retrofit private constructor(
     val baseUrl: String,
@@ -20,8 +19,8 @@ class Retrofit private constructor(
     return proxyInstance as T
   }
 
-  fun <T : Any> create(service: KClass<T>): T {
-    return create(service.java)
+  inline fun <reified T : Any> create(): T {
+    return create(T::class.java)
   }
 
   internal fun validate(): Retrofit {
