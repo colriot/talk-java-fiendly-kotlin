@@ -9,7 +9,6 @@ import retrofit.Client
 import retrofit.RetroBuilder
 import sample.Api
 import sample.SegmentPlugin
-import util.FIXME
 import util.forEachReversed
 import util.printReversedSum
 import util.reverse
@@ -29,13 +28,16 @@ fun main(args: Array<String>) {
 
 
 
+
+
+
+
+
 private fun useAnalytics() {
 
-  // Overloads
   Analytics.send(Event("only_name_event"))
 
 
-  // Statics
   val props = mapOf(
       USER_ID to 1235,
       "my_custom_attr" to true
@@ -44,35 +46,56 @@ private fun useAnalytics() {
   Analytics.send(Event("custom_event", props))
 
 
-  // Renaming
   val hasPlugins = Analytics.hasPlugins
 
 
-  // Accessing fields, constants
   Analytics.addPlugin(EMPTY_PLUGIN) // dry-run
 
 
-  val loggerPlugin = LoggerPlugin("ALog")
-  println("Logger TAG: ${loggerPlugin.tag}")
-
-
-  // Wildcards
-
-  Analytics.addPlugins(listOf(loggerPlugin, SegmentPlugin()))
+  Analytics.addPlugins(listOf(LoggerPlugin("ALog"), SegmentPlugin()))
 
   val plugins = Analytics.getPlugins()
   displayPlugins(plugins)
 
 
-  // Will cause error if uncommented, due to immutable
-  // nature of List
 //  Analytics.getPlugins().add(EmptyPlugin())
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 private fun displayPlugins(plugins: List<Plugin>) {
   println("Following plugins installed: ")
   plugins.forEach { println(it.javaClass) }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -89,16 +112,33 @@ private fun useUtils() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 private fun useRetrofit() {
-  // Builders
-  val retrofit = RetroBuilder() // Can use typealiases
+  val retrofit = RetroBuilder()
       .baseUrl("https://api.domain.com")
       .client(Client())
       .build()
 
 
 
-  // KClass<*> handling. Internal visibility.
   val api = retrofit
       .create(Api::class)
 
@@ -108,13 +148,28 @@ private fun useRetrofit() {
 
 
 
-private fun useMisc() {
-  // Inline functions. Unit.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  private fun useMisc() {
   listOf(1, 2, 3, 4).forEachReversed(::println)
 
-
-  // Nothing return type causes Unreachable code warning
-  FIXME()
 
   println(reversedClassName<String>())
 }

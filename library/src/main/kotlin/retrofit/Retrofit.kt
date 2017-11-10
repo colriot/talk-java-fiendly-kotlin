@@ -9,10 +9,6 @@ class Retrofit private constructor(
     val client: Client
 ) {
   fun <T : Any> create(service: Class<T>): T {
-    // Use this, if you've provided implementation for
-    // KClass in the first place.
-//    return create(service.kotlin)
-
     val proxyInstance = Proxy.newProxyInstance(
         service.classLoader,
         arrayOf(service)
@@ -32,6 +28,25 @@ class Retrofit private constructor(
     println("!!!!!! internal fun validate() was called !!!!!!")
     return this
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   class Builder {
